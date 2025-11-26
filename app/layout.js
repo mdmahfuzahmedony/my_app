@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Component/Nabvar";
-import Footer from "./component/Footer";
+import Footer from "./Component/Footer";
 import AuthProvider from "./Auth/Authprovider"; 
 
 // 🔥 ১. Toastify ইমপোর্ট করুন
