@@ -1,4 +1,5 @@
 
+import BrandSlider from "./Component/Brand";
 import FeatureProduct from "./Component/FeatureProduct";
 import HeroSection from "./Component/Herosection";
 import TestimonialSection from "./Component/testimonial";
@@ -10,6 +11,7 @@ export default function Home() {
   <HeroSection></HeroSection>
    <FeatureProduct/>
    <WhyChoose></WhyChoose>
+   <BrandSlider></BrandSlider>
    <TestimonialSection></TestimonialSection>
     </div>
  
