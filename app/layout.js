@@ -1,17 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Footer from "./Component/Footer";
 import Navbar from "./Component/Nabvar";
-import AuthProvider from "./Auth/Authprovider";
+import Footer from "./component/Footer";
+import AuthProvider from "./Auth/Authprovider"; 
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// 🔥 ১. Toastify ইমপোর্ট করুন
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'], 
+  display: 'swap',
 });
 
 export const metadata = {
@@ -22,18 +22,20 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <AuthProvider>
-          <Navbar></Navbar>
-        <div
-         className="min-h-screen">
-               {children}
-        </div>
-        <Footer></Footer>
-        </AuthProvider>
+      <body className={`${inter.className} antialiased`}>
         
+        <AuthProvider>
+          <Navbar />
+          <div className="min-h-screen">
+            {children}
+          </div>
+          <Footer />
+          
+          {/* 🔥 ২. ToastContainer এখানে অ্যাড করে দিন (AuthProvider এর ভেতরে বা বাইরে সমস্যা নেই, তবে body তে থাকলেই হলো) */}
+          <ToastContainer position="top-center" autoClose={3000} />
+          
+        </AuthProvider>
+
       </body>
     </html>
   );

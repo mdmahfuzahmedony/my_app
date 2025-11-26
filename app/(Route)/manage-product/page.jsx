@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+// ১. toast ইমপোর্ট করা হলো
+import { toast } from "react-toastify"; 
 
 export default function ManageProducts() {
   const [products, setProducts] = useState([]);
@@ -22,6 +24,8 @@ export default function ManageProducts() {
         setProducts(data);
       } catch (error) {
         console.error("Fetch failed:", error);
+        // ডাটা লোড না হলে এরর টোস্ট দেখানো যেতে পারে (অপশনাল)
+        toast.error("Failed to load products");
       } finally {
         setLoading(false);
       }
@@ -32,34 +36,42 @@ export default function ManageProducts() {
 
   // DELETE Handler
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure?")) return;
+    // কনফার্মেশন পপ-আপ
+    if (!confirm("Are you sure you want to delete this product?")) return;
 
-    const res = await fetch(
-      `https://roam-car-server.vercel.app/roam_cars/${id}`,
-      {
-        method: "DELETE",
+    try {
+      const res = await fetch(
+        `https://roam-car-server.vercel.app/roam_cars/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (res.ok) {
+        // লিস্ট থেকে আইটেম রিমুভ করা
+        setProducts((prev) => prev.filter((p) => p._id !== id));
+        
+        // ২. alert এর পরিবর্তে toast.success ব্যবহার করা হলো
+        toast.success("Product Deleted Successfully! 🗑️");
+      } else {
+        toast.error("Failed to delete product!");
       }
-    );
-
-    if (res.ok) {
-      setProducts((prev) => prev.filter((p) => p._id !== id));
-      alert("Deleted Successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong!");
     }
   };
 
-  if (loading) return <p className="p-6 text-xl text-center">Loading...</p>;
+  if (loading) return <p className="p-6 text-xl text-center text-white">Loading products...</p>;
 
   return (
-    // 1. px-4 যোগ করা হয়েছে মোবাইল প্যাডিংয়ের জন্য
     <div className="p-4 md:p-6 max-w-[1450px] mx-auto my-10 md:my-20">
-      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center text-white">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 text-center text-gray-800">
         Manage Products
       </h1>
 
-      {/* 2. এই div টি টেবিলকে রেসপন্সিভ (স্ক্রলযোগ্য) বানাবে */}
       <div className="overflow-x-auto w-full shadow-lg rounded-lg bg-gray-800 border border-gray-700">
         
-        {/* 3. min-w-[800px] দেওয়া হয়েছে যাতে টেবিলটি সংকুচিত না হয়ে স্ক্রল হয় */}
         <table className="w-full min-w-[800px] border-collapse text-left text-sm md:text-base">
           <thead className="bg-gray-900 text-gray-100 uppercase tracking-wider">
             <tr>
@@ -87,7 +99,7 @@ export default function ManageProducts() {
                 </td>
 
                 <td className="p-4 text-blue-400 font-bold whitespace-nowrap">
-                  {item.price}
+                  ${item.price}
                 </td>
 
                 <td className="p-4 text-gray-400 text-xs md:text-sm">
@@ -104,7 +116,7 @@ export default function ManageProducts() {
                       View
                     </button>
 
-                    {/* ▶ Delete */}
+                    {/* ▶ Delete Button */}
                     <button
                       onClick={() => handleDelete(item._id)}
                       className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded text-xs md:text-sm transition"
@@ -119,7 +131,6 @@ export default function ManageProducts() {
         </table>
       </div>
       
-      {/* টিপস: নিচে মোবাইলের জন্য একটা ছোট মেসেজ দিতে পারো */}
       <p className="md:hidden text-gray-500 text-xs text-center mt-3">
         Swipe left to see more details →
       </p>

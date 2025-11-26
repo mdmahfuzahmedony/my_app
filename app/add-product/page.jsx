@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+// ১. toast ইমপোর্ট করা হলো
+import { toast } from "react-toastify"; 
 
 const AddProductPage = () => {
   const [formData, setFormData] = useState({
@@ -27,8 +29,13 @@ const AddProductPage = () => {
       });
 
       const data = await res.json();
-      if (data.success) {
-        alert("Product added successfully!");
+
+      // ২. এখানে চেক করা হচ্ছে রেসপন্স ঠিক আছে কিনা
+      if (res.ok) {
+        // ৩. সাকসেস টোস্ট
+        toast.success("Product added successfully! 🎉");
+        
+        // ফর্ম রিসেট
         setFormData({
           title: "",
           shortDescription: "",
@@ -38,11 +45,13 @@ const AddProductPage = () => {
           meta: "",
         });
       } else {
-        alert("Failed to add product");
+        // ৪. ফেইল টোস্ট
+        toast.error("Failed to add product ❌");
       }
     } catch (error) {
       console.error(error);
-      alert("Error adding product");
+      // ৫. এরর টোস্ট
+      toast.error("Something went wrong! ⚠️");
     }
   };
 
