@@ -6,7 +6,7 @@ import WhyChoose from "./Component/WhyChoose";
 
 export default function Home() {
   return (
-    <div>
+    <div className="max-w-[1450px] mx-auto">
   <HeroSection></HeroSection>
    <FeatureProduct/>
    <WhyChoose></WhyChoose>
